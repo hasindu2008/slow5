@@ -6,6 +6,6 @@ This page keeps track of all the links/pages associated with SLOW5 ecosystem in 
 - [Software libraries](libs.md)
 - [Bioinformatic tools](https://hasindu2008.github.io/slow5tools/software.html)
 - [Bioinformatics workflows](workflows.md)
-- [Open datasets](datasets.md)
+- [Open datasets](data.md)
 - [Learning resourses](learn.md)
 
