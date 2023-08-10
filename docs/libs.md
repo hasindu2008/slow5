@@ -13,6 +13,6 @@
 - Go library (developed by [Koeng101](https://github.com/Koeng101))
     - https://github.com/TimothyStiles/poly/tree/main/io/slow5
  
-- Rust library (developed by [bsaintjo](https://github.com/bsaintjo)
-    - [https://docs.rs/slow5/latest/slow5](https://docs.rs/slow5/latest/slow5)https://docs.rs/slow5/latest/slow5
+- Rust library (developed by [bsaintjo](https://github.com/bsaintjo))
+    - [https://docs.rs/slow5/latest/slow5](https://docs.rs/slow5/latest/slow5)
   
