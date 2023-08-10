@@ -9,4 +9,4 @@
 - Python examples
   - [https://hasindu2008.github.io/slow5lib/pyslow5_api/pyslow5.html](https://hasindu2008.github.io/slow5lib/pyslow5_api/pyslow5.html)
 - Simple toolkit example
-  - [https://github.com/hasindu2008/sigtk](https://github.com/hasindu2008/sigtk)https://github.com/hasindu2008/sigtk
+  - [https://github.com/hasindu2008/sigtk](https://github.com/hasindu2008/sigtk)
