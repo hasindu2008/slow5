@@ -1,10 +1,12 @@
 # Nanopore signal data, the SLOW5 format, and you
 
+In this document we provide a brief overview and explanation of nanopore signal data in relation to the SLOW5 file format. We explain what nanopore sequencing is, how we observe and interpret the data, and how SLOW5 fits into all of it.
+
 ## What the heck is nanopore?
 
-Nanopore sequencing is a method of capturing the nucleotide sequence of single-stranded DNA (ssDNA) or RNA. 
+Nanopore sequencing is a method of capturing the nucleobase sequence of single-stranded DNA (ssDNA) or RNA. 
 This specific method involves driving single strand nucleic acids through a nanoscopic protein pore by an applied voltage.
-This protein pore is sensitive to the nucleotides being fed through it, and will change in conductivity depending on the nucleotide sequence inside the pore.
+This protein pore is sensitive to the nucleobases being fed through it, and will change in conductivity depending on the nucleobase sequence inside the pore.
 By measuring the conductivity of the pore, we store this signal data, and later map it to the base sequence of our ssDNA and RNA.
 
 ### The Setup
@@ -19,7 +21,7 @@ This figure shows the setup of a nanopore experiment. A DNA strand is drawn thro
 
 α-hemolysin is a nanopore protein commonly used in initial experiments. The reason it is so suitable for nanopore sequencing is because it forms a ~1.5nm opening through the impermeable lipid-bilayer. This diameter, whilst much larger than the ions of the KCl solution, allowing for easy passage; can only just fit a single polynucleotide of DNA (~1.2nm), and cannot fit double-stranded DNA (~2.4nm).
 
-However, in order to accurately map the current to the passage of nucleic acids through the nanopore, we must be able to control the rate at which the strand is being passed through. To solve this, a motor protein (that is unable to fit through the pore), is attached to the end of a ssDNA/RNA strand. Enzymes such as helicases and polymerases have the advantage of traversing though DNA in distinct steps, without needing any additional external source of energy applied. Now when a strand is pulled through the nanopore, it can only go through as fast as the motor protein allows it.
+In order to accurately map the current to the passage of nucleic acids through the nanopore, we must be able to control the rate at which the strand is being passed through. To solve this, a motor protein (that is unable to fit through the pore), is attached to the end of a ssDNA/RNA strand. Enzymes such as helicases and polymerases have the advantage of traversing though DNA in distinct steps, without needing any additional external source of energy applied. Now when a strand is pulled through the nanopore, it can only go through as fast as the motor protein allows it.
 
 ### The Data
 
@@ -33,17 +35,16 @@ Tranditionally, a voltage bias of ~120-180mV is applied between the two sides of
 
 (c) Small modulations in current we might see in a blockade. These modulations are interpreted as corresponding to specific DNA or RNA bases.
 
-## Why nanopore?
-
-
-
 ## Current Limitations
+
+The nanopore proteins used today have a sensing zone of a minimum 4-5 nucleobases. What this means is that we cannot create a 1-1 mapping of the signal to individual nucleobases. Until a nanopore protein is found that can produce a current reflecting a single nucleobase, we rely on computational algorithms and techniques to decode nanopore signal data.
 
 ## Why SLOW5?
 
+Oxford Nanopore Technologies (ONT) is the leading commercial provider of nanopore sequencing. The default FAST5 file format is not optimal for the large amounts of data processing and manipulation for interpreting nanopore signal data. Hence, SLOW5 was developed to overcome inherent limitations in the standard FAST5 signal data format that prevent efficient, scalable analysis and cause many headaches for developers.
 
 ## Whats inside my SLOW5 file?
 
-### Headers
+SLOW5 stores the metadata and raw signal output of DNA/RNA sequencing runs done through ONT nanopore platforms such as the PromethION, and MinION.
 
-### Entries
+The full specifications of each SLOW5 version can be found here: [slow5 specs](https://hasindu2008.github.io/slow5specs/)
