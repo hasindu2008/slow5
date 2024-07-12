@@ -53,7 +53,7 @@ In order to start sequencing DNA, the MinION must take in a disposable component
 
 As discussed before, current nanopore instruments are not impervious to physical damage and defects as part of the sequencing process. Over time, wells in the nanopore device can become temporarily or permanently blocked from producing a readable signal. To combat this, nanopore sequencers will periodically analyse the health of each well called the "mux scan" or "pore scan", and select the healthiest well in each channel in a process called "mux selection". The health of the pore is diagnosed during this stage, and its actual diagnosis is refered to as its "mux status".
 
-In addition to mux selection, if the device thinks a pore is blocked, the MinION may also attempt to "eject" DNA or contaminants that might stuck in it. This is done by applying a voltage that briefly reverses the ionic flow through the pore in hopes of clearing it out.
+In addition to mux selection, if the device thinks a pore is blocked or clogged with something, the MinION may also attempt to eject any DNA or contaminants that might stuck in it. This is done by applying a voltage that briefly reverses the ionic flow through the pore in hopes of clearing it out.
 
 ## Why SLOW5?
 
@@ -94,7 +94,7 @@ There are many more fields, and most of them are for advanced users that require
 
 ### Records (Reads)
 
-Each strand of ssDNA/RNA that gets sequenced through a nanopore has its resulting signal data stored into a slow5 record or "read". Each read is identified by a "read id"
+Each strand of ssDNA/RNA that gets sequenced through a nanopore has its resulting signal data stored into a slow5 record or "read". Each read is identified by a "read id".
 
 ```sh
 # get all the read ids contained ina slow5 file
@@ -104,40 +104,30 @@ slow5tools skim -rid reads.slow5
 00002194-fea5-433c-ba89-1eb6b60f0f28
 00013808-f7cb-4c36-8cdd-265aba0a7487
 0001960d-c143-4faf-bf20-753b9041812a
-0001c9f9-29f8-4e72-b2f8-d291273baea6
-00027dc0-458e-4153-ba46-2fb030aa34b8
-000286ab-1f80-40e3-a778-8d89e4e52940
-0003c949-8c33-4287-babd-eee408525dea
-0003d6d3-45c5-4ffd-96ee-ebc3a8ed7698
-00040c8f-ca80-4282-8de9-be5aa25fce1d
+...
 00049d1a-a957-472b-a1a1-86e4dac6c568
 ```
-
-Reads also contain additional metadata useful for data analysis. 
 
 ```sh
 # view all the fields of each read in a slow5 file
 slow5tools skim reads.slow5 
 ```
 
-Here are some fields from the first read of our example:
+### Dissecting a SLOW5 Record
 
-```sh
-read_id 00002194-fea5-433c-ba89-1eb6b60f0f28
-read_group 0          # read group that the read belongs to, explained later
-digitisation 2048     # number of quantization levels in the ADC converter
-sampling_rate 4000    # no. of data points collected per second
-len_raw_signal 244508 # number of samples in this read
-raw_signal .          # not displayed
-```
+Here we go into detail of each field of a slow5 record. Many of these fields are closely tied to the sequencing structure of an ONT nanopore device, and the whole mux scanning process. I highly recommend you familiarise yourself with the previous section detailing a typical ONT device setup before skipping to this bit.
 
-Most of the other fields are for advanced users and require a more detailed explanation. The full specification can be found here: [slow5 specs](https://hasindu2008.github.io/slow5specs/).
+And again, the full specification can be found here: [slow5 specs](https://hasindu2008.github.io/slow5specs/).
+
+#### Primary Fields
+
+
+
+#### Auxilary Fields
 
 ### Read Groups
 
 Multiple different runs can be stored in a single slow5 file. Doing so will organize the data into different "read groups". Metadata associated with each read group is stored in the header in their respective fields. Each read in a slow5 file contains the field `read_group`, indicating the read group it belongs to. Read groups are identified by their order in the header.
-
-## Dissecting a SLOW5 Record
 
 ## Small Example Uses
 
