@@ -1,4 +1,4 @@
-# Nanopore signal data, the SLOW5 format, and you
+# Nanopore Signal Data, The SLOW5 Format, and You
 
 In this document we provide a brief overview and explanation of nanopore signal data in relation to the SLOW5 file format. We explain what nanopore sequencing is, how we observe and interpret the data, and how SLOW5 fits into all of it.
 
@@ -41,17 +41,25 @@ The nanopore proteins used today have a sensing zone of a minimum 4-5 nucleobase
 
 Furthermore, as is typical with physical measurements, many different errors can and will almost always occur during sequencing. For example, nanopores can get saturated or blocked, the motor enzyme might step through the bases too quickly for an accurate measurement, signals expressed by different base sequences may be too similar for basecalling, the pysical nucleotide strands themselves become damaged, etc.
 
+## ONT's MultiPore Setup (Flow Cells)
+
+ONT nanopore setups follow pretty closely to the previously illustrated examples, but are more tailored towards high-volume sequencing. The setup of these sequencers are relevant to the slow5 file format as many fields will depend to external events and physical attributes of the nanopore device. Mux status, read numbers, and channel ids are all important markers for analyzing your sequencing runs. Researches may use these datapoints to evaluate the efficacy of enrichment techniques, or identifying problematic transcripts. Here we will specifically look at the MinION device, but all devices will output the same FAST5 file format, and the setup discussed will generally be applicable to all ONT nanopore sequencers.
+
+### Sensor Array, Wells, and Channels
+
+In order to start sequencing DNA, the MinION must take in a disposable component called a "flow cell". You can think of a flow cell as a hot-swappable version of the *cis* and *trans* liquid chambers discussed in the setup before. A MinION flow cell holds 2048 total sensor "wells". Each well holds a single nanopore between a shared *cis* chamber and its own individual *trans* chamber well. Each *trans* chamber well contains a electrode at its base where the current can be measured. Despite containing 2048 sensor wells, the MinION can only measure 512 simultaneously. Thus, each of the wells are organised into groups of 4, which we can refer to as "channels". The sequencer will select best performing well in each channel to have its current recorded.
+
+### Mux Scan, Mux Status, Mux Selection
+
+As discussed before, current nanopore instruments are not impervious to physical damage and defects as part of the sequencing process. Over time, wells in the nanopore device can become temporarily or permanently blocked from producing a readable signal. To combat this, nanopore sequencers will periodically analyse the health of each well called the "mux scan" or "pore scan", and select the healthiest well in each channel in a process called "mux selection". The health of the pore is diagnosed during this stage, and its actual diagnosis is refered to as its "mux status".
+
+In addition to mux selection, if the device thinks a pore is blocked, the MinION may also attempt to "eject" DNA or contaminants that might stuck in it. This is done by applying a voltage that briefly reverses the ionic flow through the pore in hopes of clearing it out.
+
 ## Why SLOW5?
 
 Oxford Nanopore Technologies (ONT) is the leading commercial provider of nanopore sequencing. The default FAST5 file format is not optimal for the large amounts of data processing and manipulation required for interpreting nanopore signal data. Hence, SLOW5 was developed to overcome inherent limitations in the standard FAST5 signal data format that prevent efficient, scalable analysis and cause many headaches for developers.
 
-## ONT's MultiPore Setup
-
-ONT nanopore setups follow pretty closely to the previously illustrated examples, but are more tailored towards high-volume sequencing. The setup of these sequencers are relevant to the slow5 file format as many fields will depend to external events and physical attributes of the nanopore device. Mux status, read numbers, and channel ids are all important markers for analyzing your sequencing runs. Researches may use these datapoints to evaluate the efficacy of enrichment techniques, or identifying problematic transcripts.
-
-
-
-## Whats inside my SLOW5 file?
+## Whats Inside My SLOW5 File?
 
 SLOW5 stores the metadata and raw signal output of DNA/RNA sequencing runs completed through ONT nanopore platforms such as the PromethION, and MinION. Metadata can be viewed in the header of each SLOW5. Distinct partitions of signal data captured by the sequencing run is stored in separate records or "reads" in the body of the SLOW5 file.
 
