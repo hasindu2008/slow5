@@ -19,7 +19,7 @@ This figure shows the setup of a nanopore experiment. A DNA strand is drawn thro
 
 (b) Magnification of the *cis* chamber. The pore in the *cis* side provides the only connection between the two chambers. This is the only point where ions and molecules can move from the *cis* side to the *trans* side.
 
-α-hemolysin is a nanopore protein commonly used in initial experiments. The reason it is so suitable for nanopore sequencing is because it forms a ~1.5nm opening through the impermeable lipid-bilayer. This diameter, whilst much larger than the ions of the KCl solution, allowing for easy passage; can only just fit a single polynucleotide of DNA (~1.2nm), and cannot fit double-stranded DNA (~2.4nm).
+α-hemolysin is a nanopore protein commonly used in initial experiments. The reason it is so suitable for nanopore sequencing is because it forms a ~1.5nm opening through the ion-impermeable lipid-bilayer. This diameter, whilst much larger than the ions of the KCl solution, allowing for easy passage; can only just fit a single polynucleotide of DNA (~1.2nm), and cannot fit double-stranded DNA (~2.4nm).
 
 In order to accurately map the current to the passage of nucleic acids through the nanopore, we must be able to control the rate at which the strand is being passed through. To solve this, a motor protein (that is unable to fit through the pore), is attached to the end of a ssDNA/RNA strand. Enzymes such as helicases and polymerases have the advantage of traversing though DNA in distinct steps, without needing any additional external source of energy applied. Now when a strand is pulled through the nanopore, it can only go through as fast as the motor protein allows it.
 
@@ -39,9 +39,17 @@ Tranditionally, a voltage bias of ~120-180mV is applied between the two sides of
 
 The nanopore proteins used today have a sensing zone of a minimum 4-5 nucleobases. What this means is that we cannot create a 1-1 mapping of the signal to individual nucleobases. Until a nanopore protein is found that can produce a current reflecting a single nucleobase, we rely on computational algorithms and techniques to decode nanopore signal data.
 
+Furthermore, as is typical with physical measurements, many different errors can and will almost always occur during sequencing. For example, nanopores can get saturated or blocked, the motor enzyme might step through the bases too quickly for an accurate measurement, signals expressed by different base sequences may be too similar for basecalling, the pysical nucleotide strands themselves become damaged, etc.
+
 ## Why SLOW5?
 
 Oxford Nanopore Technologies (ONT) is the leading commercial provider of nanopore sequencing. The default FAST5 file format is not optimal for the large amounts of data processing and manipulation required for interpreting nanopore signal data. Hence, SLOW5 was developed to overcome inherent limitations in the standard FAST5 signal data format that prevent efficient, scalable analysis and cause many headaches for developers.
+
+## ONT's MultiPore Setup
+
+ONT nanopore setups follow pretty closely to the previously illustrated examples, but are more tailored towards high-volume sequencing. The setup of these sequencers are relevant to the slow5 file format as many fields will depend to external events and physical attributes of the nanopore device. Mux status, read numbers, and channel ids are all important markers for analyzing your sequencing runs. Researches may use these datapoints to evaluate the efficacy of enrichment techniques, or identifying problematic transcripts.
+
+
 
 ## Whats inside my SLOW5 file?
 
@@ -120,6 +128,8 @@ Most of the other fields are for advanced users and require a more detailed expl
 ### Read Groups
 
 Multiple different runs can be stored in a single slow5 file. Doing so will organize the data into different "read groups". Metadata associated with each read group is stored in the header in their respective fields. Each read in a slow5 file contains the field `read_group`, indicating the read group it belongs to. Read groups are identified by their order in the header.
+
+## Dissecting a SLOW5 Record
 
 ## Small Example Uses
 
