@@ -55,6 +55,14 @@ As discussed before, current nanopore instruments are not impervious to physical
 
 In addition to mux selection, if the device thinks a pore is blocked or clogged with something, the MinION may also attempt to eject any DNA or contaminants that might stuck in it. This is done by applying a voltage that briefly reverses the ionic flow through the pore in hopes of clearing it out.
 
+## Signal Conversion
+
+Before the raw signal collected from a nanopore is recorded, it will undergo a conversion into [pico amps](https://en.wikipedia.org/wiki/Ampere#SI_prefixes). This is performed by the Analog to Digital Converter of the nanopore sequencer. The conversion is calculated in the following equation:
+
+`signal_in_pico_ampere = (raw_signal_value + offset) * range / digitisation`
+
+We will revisit this when we look at the slow5 file format.
+
 ## Why SLOW5?
 
 Oxford Nanopore Technologies (ONT) is the leading commercial provider of nanopore sequencing. The default FAST5 file format is not optimal for the large amounts of data processing and manipulation required for interpreting nanopore signal data. Hence, SLOW5 was developed to overcome inherent limitations in the standard FAST5 signal data format that prevent efficient, scalable analysis and cause many headaches for developers.
@@ -113,21 +121,78 @@ slow5tools skim -rid reads.slow5
 slow5tools skim reads.slow5 
 ```
 
-### Dissecting a SLOW5 Record
+### SLOW5 Record Primary Fields
 
-Here we go into detail of each field of a slow5 record. Many of these fields are closely tied to the sequencing structure of an ONT nanopore device, and the whole mux scanning process. I highly recommend you familiarise yourself with the previous section detailing a typical ONT device setup before skipping to this bit.
+Here we go into detail of each primary field of a slow5 record. These fields are mandatory and thus will appear in every slow5 record you come across.
 
-And again, the full specification can be found here: [slow5 specs](https://hasindu2008.github.io/slow5specs/).
+---
 
-#### Primary Fields
+**read_id** | string\
+The `read_id` is a simply unique ID for each record in a particular slow5 file.
 
+---
 
+**read_group** | uint\
+The read group that this particular record belongs to. Read groups are identified by their order in the header, so a file that contains only a single run will have all records pointing to the read group 0. This is explained in more detail later.
 
-#### Auxilary Fields
+---
+
+**digitisation** | double\
+Refers to the number of quantisation levels in the Analog to Digital Converter (ADC). For example,  if the ADC is 12 bit, digitisation is 4096 (2^12).
+
+---
+
+**offset** | double\
+This is just the value added to our raw signal when it's converted into pico amperes.
+
+---
+
+**range** | double\
+The full scale measurement range of our signal in pico amperes.
+
+---
+
+**sampling_rate** | double\
+Sampling frequency of the ADC. Just think of this as how many times the signal is sampled every second by the nanopore device.
+
+---
+
+### SLOW5 Record Auxilary Fields
+
+Many of these fields are closely tied to the sequencing structure of an ONT nanopore device, and the whole mux scanning process. I highly recommend you familiarise yourself with the previous section detailing a typical ONT device setup before skipping to this bit.
+
+---
+
+**channel_number** | uint\
+This simply indicates the channel that this read was sequenced in.
+
+---
+
+**median_before** | double\
+The estimated median current level that was recorded immediately before the read begins. Usually, pore is in an open state before the read. You can think of this as the median current level right before a blockade.
+
+---
+
+**read_number** | int\
+When a channel's signal is recorded as a read, the device keeps track of what order a read appears in. So for a record with `channel_number=5` and a `read_number=100`, we know that the record was the 100th read sequenced in channel 5. It is also important to note that not all reads are recorded into the file.
+
+---
+
+**start_mux** | uint\
+This is the MUX setting for the channel before the read begins. Remember that Mux settings are calculated on a per-channel basis, with a channel containing multiple wells.
+
+---
+
+**start_time** | uint\
+The time that this read began. This is measured in the number of samples taken since the run had started.
+
+`start_time_in_secs = start_time / sampling_rate`
+
+---
 
 ### Read Groups
 
-Multiple different runs can be stored in a single slow5 file. Doing so will organize the data into different "read groups". Metadata associated with each read group is stored in the header in their respective fields. Each read in a slow5 file contains the field `read_group`, indicating the read group it belongs to. Read groups are identified by their order in the header.
+Multiple different runs can be stored in a single slow5 file. Doing so will organize the data into different "read groups". Metadata associated with each read group is stored in the header in their respective fields. Each read in a slow5 file contains the field `read_group`, indicating the read group it belongs to.
 
 ## Small Example Uses
 
