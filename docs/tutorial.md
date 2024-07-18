@@ -2,6 +2,24 @@
 
 In this document we provide a brief overview and explanation of nanopore signal data in relation to the SLOW5 file format. We explain what nanopore sequencing is, how we observe and interpret the data, and how SLOW5 fits into all of it.
 
+# Table of Contents
+1. [What the Heck is a Nanopore?](#what-the-heck-is-a-nanopore)
+    1. [The Setup](#the-setup)
+    2. [The Data](#the-data)
+    3. [Current Limitations](#current-limitations)
+3. [ONT's MultiPore Setup](#onts-multipore-setup-flow-cells)
+    1. [Sensor Array, Wells, and Channels](#sensor-array-wells-and-channels)
+    2. [Mux Scan, Mux Status, Mux Selection](#mux-scan-mux-status-mux-selection)
+4. [Signal Conversion](#signal-conversion)
+5. [Why SLOW5?](#why-slow5)
+6. [Whats Inside My SLOW5 File?](#whats-inside-my-slow5-file)
+    1. [Header](#header)
+    2. [Records](#records-reads)
+    3. [SLOW5 Record Primary Fields](#slow5-record-primary-fields)
+    4. [SLOW5 Record Auxilary Fields](#slow5-record-auxilary-fields)
+7. [Small Example Uses](#small-example-uses)
+8. [End](#the-end)
+
 ## What the Heck is a Nanopore?
 
 Nanopore sequencing is a method of capturing the nucleobase sequence of single-stranded DNA (ssDNA) or RNA. 
