@@ -45,6 +45,8 @@ Furthermore, as is typical with physical measurements, many different errors can
 
 ONT nanopore setups follow pretty closely to the previously illustrated examples, but are more tailored towards high-volume sequencing. The setup of these sequencers are relevant to the slow5 file format as many fields will depend to external events and physical attributes of the nanopore device. Mux status, read numbers, and channel ids are all important markers for analyzing your sequencing runs. Researches may use these datapoints to evaluate the efficacy of enrichment techniques, or identifying problematic transcripts. Here we will specifically look at the MinION device, but all devices will output the same FAST5 file format, and the setup discussed will generally be applicable to all ONT nanopore sequencers.
 
+![nanopore setup wells](./../assets/images/nanopore_setup_wells.png)
+
 ### Sensor Array, Wells, and Channels
 
 In order to start sequencing DNA, the MinION must take in a disposable component called a "flow cell". You can think of a flow cell as a hot-swappable version of the *cis* and *trans* liquid chambers discussed in the setup before. A MinION flow cell holds 2048 total sensor "wells". Each well holds a single nanopore between a shared *cis* chamber and its own individual *trans* chamber well. Each *trans* chamber well contains a electrode at its base where the current can be measured. Despite containing 2048 sensor wells, the MinION can only measure 512 simultaneously. Thus, each of the wells are organised into groups of 4, which we can refer to as "channels". The sequencer will select best performing well in each channel to have its current recorded.
@@ -94,8 +96,6 @@ Here are some fields in our example file:
 @sample_id A12878                   # name of the sample given by the user
 @experiment_duration_set 320        # how long the run went for (minutes)
 @sample_frequency 4000              # no. of data points collected per second
-@exp_script_purpose sequencing_run  # indicates the purpose of the experiment
-@experiment_type genomic_dna        # indicates the type of experiment performed
 ```
 
 There are many more fields, and most of them are for advanced users that require a more detailed explanation. The full specification can be found here: [slow5 specs](https://hasindu2008.github.io/slow5specs/).
@@ -128,7 +128,7 @@ Here we go into detail of each primary field of a slow5 record. These fields are
 ---
 
 **read_id** | string\
-The `read_id` is a simply unique ID for each record in a particular slow5 file.
+Simply the unique ID for each record in a particular slow5 file.
 
 ---
 
@@ -163,7 +163,7 @@ Many of these fields are closely tied to the sequencing structure of an ONT nano
 
 ---
 
-**channel_number** | uint\
+**channel_number** | string\
 This simply indicates the channel that this read was sequenced in.
 
 ---
@@ -219,3 +219,7 @@ slow5tools get reads.blow5 00002194-fea5-433c-ba89-1eb6b60f0f28
 ```
 
 More advanced uses can be found in the full documation: [slow5tools docs](https://hasindu2008.github.io/slow5tools/).
+
+## The End
+
+Congratulations! You made it! Have a gold star: :star:.  This tutorial was written by [BonsonW](https://github.com/BonsonW). If you think this tutorial requires any changes, feel free to ping me in an [Issue](https://github.com/hasindu2008/slow5/issues).
