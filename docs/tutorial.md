@@ -18,7 +18,7 @@ In this document we provide a brief overview and explanation of nanopore signal 
     - [Header](#header)
     - [Records (Reads)](#records-reads)
     - [SLOW5 Record Primary Fields](#slow5-record-primary-fields)
-    - [SLOW5 Record Auxilary Fields](#slow5-record-auxilary-fields)
+    - [SLOW5 Record Auxiliary Fields](#slow5-record-auxiliary-fields)
     - [Read Groups](#read-groups)
   - [Small Example Uses](#small-example-uses)
   - [The End](#the-end)
@@ -190,7 +190,7 @@ Sampling frequency of the ADC. Just think of this as how many times the signal i
 
 ---
 
-### SLOW5 Record Auxilary Fields
+### SLOW5 Record Auxiliary Fields
 
 Many of these fields are closely tied to the sequencing structure of an ONT nanopore device, and the whole mux scanning process. I highly recommend you familiarise yourself with the previous section detailing a typical ONT device setup before skipping to this bit.
 
