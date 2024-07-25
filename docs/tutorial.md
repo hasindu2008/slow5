@@ -3,22 +3,25 @@
 In this document we provide a brief overview and explanation of nanopore signal data in relation to the SLOW5 file format. We explain what nanopore sequencing is, how we observe and interpret the data, and how SLOW5 fits into all of it.
 
 # Table of Contents
-1. [What the Heck is a Nanopore?](#what-the-heck-is-a-nanopore)
-    1. [The Setup](#the-setup)
-    2. [The Data](#the-data)
-    3. [Current Limitations](#current-limitations)
-3. [ONT's MultiPore Setup](#onts-multipore-setup-flow-cells)
-    1. [Sensor Array, Wells, and Channels](#sensor-array-wells-and-channels)
-    2. [Mux Scan, Mux Status, Mux Selection](#mux-scan-mux-status-mux-selection)
-4. [Signal Conversion](#signal-conversion)
-5. [Why SLOW5?](#why-slow5)
-6. [Whats Inside My SLOW5 File?](#whats-inside-my-slow5-file)
-    1. [Header](#header)
-    2. [Records](#records-reads)
-    3. [SLOW5 Record Primary Fields](#slow5-record-primary-fields)
-    4. [SLOW5 Record Auxilary Fields](#slow5-record-auxilary-fields)
-7. [Small Example Uses](#small-example-uses)
-8. [End](#the-end)
+- [Nanopore Signal Data, The SLOW5 Format, and You](#nanopore-signal-data-the-slow5-format-and-you)
+- [Table of Contents](#table-of-contents)
+  - [What the Heck is a Nanopore?](#what-the-heck-is-a-nanopore)
+    - [The Setup](#the-setup)
+    - [The Data](#the-data)
+  - [Current Limitations](#current-limitations)
+  - [ONT's MultiPore Setup (Flow Cells)](#onts-multipore-setup-flow-cells)
+    - [Sensor Array, Wells, and Channels](#sensor-array-wells-and-channels)
+    - [Mux Scan, Mux Status, Mux Selection](#mux-scan-mux-status-mux-selection)
+  - [Signal Conversion](#signal-conversion)
+  - [Why SLOW5?](#why-slow5)
+  - [Whats Inside My SLOW5 File?](#whats-inside-my-slow5-file)
+    - [Header](#header)
+    - [Records (Reads)](#records-reads)
+    - [SLOW5 Record Primary Fields](#slow5-record-primary-fields)
+    - [SLOW5 Record Auxiliary Fields](#slow5-record-auxiliary-fields)
+    - [Read Groups](#read-groups)
+  - [Small Example Uses](#small-example-uses)
+  - [The End](#the-end)
 
 ## What the Heck is a Nanopore?
 
@@ -61,7 +64,7 @@ Furthermore, as is typical with physical measurements, many different errors can
 
 ## ONT's MultiPore Setup (Flow Cells)
 
-ONT nanopore setups follow pretty closely to the previously illustrated examples, but are more tailored towards high-volume sequencing. The setup of these sequencers are relevant to the slow5 file format as many fields will depend to external events and physical attributes of the nanopore device. Mux status, read numbers, and channel ids are all important markers for analyzing your sequencing runs. Researches may use these datapoints to evaluate the efficacy of enrichment techniques, or identifying problematic transcripts. Here we will specifically look at the MinION device, but all devices will output the same FAST5 file format, and the setup discussed will generally be applicable to all ONT nanopore sequencers.
+ONT nanopore setups follow pretty closely to the previously illustrated examples, but are more tailored towards high-volume sequencing. The setup of these sequencers are relevant to the slow5 file format as many fields will depend to external events and physical attributes of the nanopore device. Mux status, read numbers, and channel ids are all important markers for analyzing your sequencing runs. Researches may use these datapoints to evaluate the efficacy of enrichment techniques, or identifying problematic transcripts. Here we will specifically look at the MinION device, but all devices will output the same FAST5/POD5 file format, and the setup discussed will generally be applicable to all ONT nanopore sequencers.
 
 ![nanopore setup wells](./assets/images/nanopore_setup_wells.png)
 
@@ -77,15 +80,15 @@ In addition to mux selection, if the device thinks a pore is blocked or clogged 
 
 ## Signal Conversion
 
-Before the raw signal collected from a nanopore is recorded, it will undergo a conversion into [pico amps](https://en.wikipedia.org/wiki/Ampere#SI_prefixes). This is performed by the Analog to Digital Converter of the nanopore sequencer. The conversion is calculated in the following equation:
+The analogue signal measured undergoes digital conversion via the Analog to Digital Converter (ADC) before it can be stored in memory. We refer to the digital signal output by the ADC as our "raw signal". To convert this raw signal into the approximation of our actual anagolue signal in [pico amps](https://en.wikipedia.org/wiki/Ampere#SI_prefixes), we use the following equation:
 
-`signal_in_pico_ampere = (raw_signal_value + offset) * range / digitisation`
+`signal_in_pico_ampere = (raw_signal + offset) * (range / digitisation)`
 
-We will revisit this when we look at the slow5 file format.
+The `raw_signal` is the one stored in file, and must be converted into `signal_in_pico_ampere` when we want to use it. We will revisit these parameters when we look at the SLOW5 file format.
 
 ## Why SLOW5?
 
-Oxford Nanopore Technologies (ONT) is the leading commercial provider of nanopore sequencing. The default FAST5 file format is not optimal for the large amounts of data processing and manipulation required for interpreting nanopore signal data. Hence, SLOW5 was developed to overcome inherent limitations in the standard FAST5 signal data format that prevent efficient, scalable analysis and cause many headaches for developers.
+Oxford Nanopore Technologies (ONT) is the leading commercial provider of nanopore sequencing. The default FAST5/POD5 file format is not optimal for the large amounts of data processing and manipulation required for interpreting nanopore signal data. Hence, SLOW5 was developed to overcome inherent limitations in the standard FAST5/POD5 signal data format that prevent efficient, scalable analysis and cause many headaches for developers.
 
 ## Whats Inside My SLOW5 File?
 
@@ -97,7 +100,7 @@ The full specifications of each SLOW5 version can be found here: [slow5 specs](h
 
 ### Header
 
-The header of a slow5 file will contain all the meta data associated with reads in your file. It is located at the start of the file.
+The header of a SLOW5 file will contain all the meta data associated with reads in your file. It is located at the start of the file. The header is usually only looked at if you need information about the experiment itself, or the hardware it was performed on.
 
 ```sh
 # view the header of a slow5 file
@@ -120,7 +123,7 @@ There are many more fields, and most of them are for advanced users that require
 
 ### Records (Reads)
 
-Each strand of ssDNA/RNA that gets sequenced through a nanopore has its resulting signal data stored into a slow5 record or "read". Each read is identified by a "read id".
+Each strand of ssDNA/RNA that gets sequenced through a nanopore has its resulting signal data stored into a SLOW5 record or "read". Each read is identified by a "read id".
 
 ```sh
 # get all the read ids contained ina slow5 file
@@ -141,12 +144,12 @@ slow5tools skim reads.slow5
 
 ### SLOW5 Record Primary Fields
 
-Here we go into detail of each primary field of a slow5 record. These fields are mandatory and thus will appear in every slow5 record you come across.
+Here we go into detail of each primary field of a SLOW5 record. These fields are mandatory and thus will appear in every SLOW5 record you come across.
 
 ---
 
 **read_id** | string\
-Simply the unique ID for each record in a particular slow5 file.
+Simply the unique ID for each record in a particular SLOW5 file.
 
 ---
 
@@ -155,13 +158,25 @@ The read group that this particular record belongs to. Read groups are identifie
 
 ---
 
+**raw_signal** | [int_16]\
+This is the raw signal value output by the ADC on our nanopore device (for this read). We store our raw signal as list of 16-bit integers. The raw signal is not a direct representation of the analogue signal measured and must be converted via the following equation:
+
+`signal_in_pico_ampere = (raw_signal + offset) * (range / digitisation)`
+
+---
+
+**len_raw_signal** | uint_64\
+The number of values (samples) in our raw signal.
+
+---
+
 **digitisation** | double\
-Refers to the number of quantisation levels in the Analog to Digital Converter (ADC). For example,  if the ADC is 12 bit, digitisation is 4096 (2^12).
+Refers to the number of quantisation levels in the Analog to Digital Converter (ADC). For example,  if the ADC is 12 bit, digitisation is 4096 (2^12). This is sometimes referred to as the "resolution" of our digital signal.
 
 ---
 
 **offset** | double\
-This is just the value added to our raw signal when it's converted into pico amperes.
+This is just a value we need to add to our raw signal when it's converted into pico amperes.
 
 ---
 
@@ -175,9 +190,9 @@ Sampling frequency of the ADC. Just think of this as how many times the signal i
 
 ---
 
-### SLOW5 Record Auxilary Fields
+### SLOW5 Record Auxiliary Fields
 
-Many of these fields are closely tied to the sequencing structure of an ONT nanopore device, and the whole mux scanning process. I highly recommend you familiarise yourself with the previous section detailing a typical ONT device setup before skipping to this bit.
+Auxiliary fields may not be present in every SLOW5 file, these are just the common ones. Many of these fields are closely tied to the sequencing structure of an ONT nanopore device, and the whole mux scanning process. I highly recommend you familiarise yourself with the previous section detailing a typical ONT device setup before skipping to this bit.
 
 ---
 
@@ -210,7 +225,7 @@ The time that this read began. This is measured in the number of samples taken s
 
 ### Read Groups
 
-Multiple different runs can be stored in a single slow5 file. Doing so will organize the data into different "read groups". Metadata associated with each read group is stored in the header in their respective fields. Each read in a slow5 file contains the field `read_group`, indicating the read group it belongs to.
+Multiple different runs can be stored in a single SLOW5 file. Doing so will organize the data into different "read groups". Metadata associated with each read group is stored in the header in their respective fields. Each read in a SLOW5 file contains the field `read_group`, indicating the read group it belongs to.
 
 ## Small Example Uses
 

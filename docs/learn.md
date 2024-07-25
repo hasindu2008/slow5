@@ -1,5 +1,7 @@
 # Learning Resources
 
+- Tutorial
+  - [https://hasindu2008.github.io/slow5/tutorial](https://hasindu2008.github.io/slow5/tutorial)
 - Supplementary materials of SLOW5 paper
   - [https://www.nature.com/articles/s41587-021-01147-4#Sec10](https://www.nature.com/articles/s41587-021-01147-4#Sec10)
 - C library examples
