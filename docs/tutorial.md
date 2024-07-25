@@ -34,7 +34,7 @@ By measuring the conductivity of the pore, we store this signal data, and later 
 
 This figure shows the setup of a nanopore experiment. A DNA strand is drawn through the nanopore by applying voltage. An ion-containing fluid is channeled through a nanopore in the lipid bilayer. The lipid bilayer separates two chambers filled with buffered potassium chloride solutions (KCl). The chambers are named *cis* and *trans* respectively.
 
-![nanopore setup](./../assets/images/nanopore_setup.png)
+![nanopore setup](./assets/images/nanopore_setup.png)
 
 (a) The chambers *cis* and *trans* are interconnected via a U-shaped tube. Both chambers are filled with KCl. A voltage bias is applied via the electrodes in each chamber. This bias pulls ions and molecules from the *cis* side to the *trans* side. An ammeter measures the ionic current flowing from the *cis* chamber to the *trans* chamber.
 
@@ -48,7 +48,7 @@ In order to accurately map the current to the passage of nucleic acids through t
 
 Tranditionally, a voltage bias of ~120-180mV is applied between the two sides of the KCl solution. Without the nanopore protein, no ionic current can be measured through the lipid bilayer. Once the protein inserts itself into the bilayer, ions will start flowing through and we see an increase in the measured ionic current. This baseline current it increases to is called the "open channel current". When ssDNA or RNA is added to the *cis* chamber, we begin to see sudden drops in the measured current. We call these transient reductions "blockades". Small modulations in current are sometimes found in these blockades.
 
-![nanopore data](./../assets/images/nanopore_data.png)
+![nanopore data](./assets/images/nanopore_data.png)
 
 (a) Example measured current over time. We see an increase in current once the nanopore is inserted and an ion flow created. The open pore current I<sub>o</sub> is our baseline current. Most blockades that occur are observed to be the result of polynucleoptide strands being pulled through the pore.
 
@@ -66,7 +66,7 @@ Furthermore, as is typical with physical measurements, many different errors can
 
 ONT nanopore setups follow pretty closely to the previously illustrated examples, but are more tailored towards high-volume sequencing. The setup of these sequencers are relevant to the slow5 file format as many fields will depend to external events and physical attributes of the nanopore device. Mux status, read numbers, and channel ids are all important markers for analyzing your sequencing runs. Researches may use these datapoints to evaluate the efficacy of enrichment techniques, or identifying problematic transcripts. Here we will specifically look at the MinION device, but all devices will output the same FAST5/POD5 file format, and the setup discussed will generally be applicable to all ONT nanopore sequencers.
 
-![nanopore setup wells](./../assets/images/nanopore_setup_wells.png)
+![nanopore setup wells](./assets/images/nanopore_setup_wells.png)
 
 ### Sensor Array, Wells, and Channels
 
@@ -94,7 +94,7 @@ Oxford Nanopore Technologies (ONT) is the leading commercial provider of nanopor
 
 SLOW5 stores the metadata and raw signal output of DNA/RNA sequencing runs completed through ONT nanopore platforms such as the PromethION, and MinION. Metadata can be viewed in the header of each SLOW5. Distinct partitions of signal data captured by the sequencing run is stored in separate records or "reads" in the body of the SLOW5 file.
 
-Here we will use [slow5tools](https://github.com/hasindu2008/slow5tools), and files from a [small slow5 file](../assets/data/reads.slow5) for example usage.
+Here we will use [slow5tools](https://github.com/hasindu2008/slow5tools), and files from a [small slow5 file](./assets/data/reads.slow5) for example usage.
 
 The full specifications of each SLOW5 version can be found here: [slow5 specs](https://hasindu2008.github.io/slow5specs/).
 
@@ -229,7 +229,7 @@ Multiple different runs can be stored in a single SLOW5 file. Doing so will orga
 
 ## Small Example Uses
 
-Here we will use [slow5tools](https://github.com/hasindu2008/slow5tools), and files from [this directory](../assets/data) for example usage. 
+Here we will use [slow5tools](https://github.com/hasindu2008/slow5tools), and files from [this directory](./assets/data) for example usage. 
 
 ```sh
 # print the stats of a slow5 file
