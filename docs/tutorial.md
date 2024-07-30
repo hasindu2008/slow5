@@ -32,7 +32,7 @@ By measuring the conductivity of the pore, we store this signal data, and later 
 
 ### The Setup
 
-This figure shows the setup of a nanopore experiment. A DNA strand is drawn through the nanopore by applying voltage. An ion-containing fluid is channeled through a nanopore in the lipid bilayer. The lipid bilayer separates two chambers filled with buffered potassium chloride solutions (KCl). The chambers are named *cis* and *trans* respectively.
+This figure shows a hypothetical nanopore setup. DNA strands are drawn through the nanopore by applying voltage. An ion-containing fluid is channeled through a nanopore in the lipid bilayer. The lipid bilayer separates two chambers filled with buffered potassium chloride solutions (KCl). The chambers are named *cis* and *trans* respectively.
 
 ![nanopore setup](./assets/images/nanopore_setup.png)
 
@@ -40,9 +40,9 @@ This figure shows the setup of a nanopore experiment. A DNA strand is drawn thro
 
 (b) Magnification of the *cis* chamber. The pore in the *cis* side provides the only connection between the two chambers. This is the only point where ions and molecules can move from the *cis* side to the *trans* side.
 
-α-hemolysin is a nanopore protein commonly used in initial experiments. The reason it is so suitable for nanopore sequencing is because it forms a ~1.5nm opening through the ion-impermeable lipid-bilayer. This diameter, whilst much larger than the ions of the KCl solution, allowing for easy passage; can only just fit a single polynucleotide of DNA (~1.2nm), and cannot fit double-stranded DNA (~2.4nm).
+α-hemolysin was the original protein chosen during the early days of nanopore. The reason it was so suitable for the job is because it forms a ~1.5nm opening through the ion-impermeable lipid-bilayer. This diameter, whilst much larger than the ions of the KCl solution, allowing for easy passage; can only just fit a single polynucleotide of DNA (~1.2nm), and cannot fit double-stranded DNA (~2.4nm).
 
-In order to accurately map the current to the passage of nucleic acids through the nanopore, we must be able to control the rate at which the strand is being passed through. To solve this, a motor protein (that is unable to fit through the pore), is attached to the end of a ssDNA/RNA strand. Enzymes such as helicases and polymerases have the advantage of traversing though DNA in distinct steps, without needing any additional external source of energy applied. Now when a strand is pulled through the nanopore, it can only go through as fast as the motor protein allows it.
+Ideally, to accurately map the current to the passage of nucleic acids through the nanopore, we must be able to control the rate at which the strand is being passed through. To solve this, a motor protein (that is unable to fit through the pore), is attached to the end of a ssDNA/RNA strand. Enzymes such as helicases and polymerases have the advantage of traversing though DNA in distinct steps, without needing any additional external source of energy applied. Now when a strand is pulled through the nanopore, it can only go through as fast as the motor protein allows it.
 
 ### The Data
 
@@ -60,17 +60,19 @@ Tranditionally, a voltage bias of ~120-180mV is applied between the two sides of
 
 The nanopore proteins used today have a sensing zone of a minimum 4-5 nucleobases. What this means is that we cannot create a 1-1 mapping of the signal to individual nucleobases. Until a nanopore protein is found that can produce a current reflecting a single nucleobase, we rely on computational algorithms and techniques to decode nanopore signal data.
 
-Furthermore, as is typical with physical measurements, many different errors can and will almost always occur during sequencing. For example, nanopores can get saturated or blocked, the motor enzyme might step through the bases too quickly for an accurate measurement, signals expressed by different base sequences may be too similar for basecalling, the pysical nucleotide strands themselves become damaged, etc.
+Furthermore, as is typical with physical measurements, many different problems can and will almost always occur during sequencing. For example, nanopores can get saturated or blocked, the motor enzyme might step through the bases too quickly for an accurate measurement, signals expressed by different base sequences may be too similar for basecalling, the pysical nucleotide strands themselves become damaged, etc.
 
 ## ONT's MultiPore Setup (Flow Cells)
 
-ONT nanopore setups follow pretty closely to the previously illustrated examples, but are more tailored towards high-volume sequencing. The setup of these sequencers are relevant to the slow5 file format as many fields will depend to external events and physical attributes of the nanopore device. Mux status, read numbers, and channel ids are all important markers for analyzing your sequencing runs. Researches may use these datapoints to evaluate the efficacy of enrichment techniques, or identifying problematic transcripts. Here we will specifically look at the MinION device, but all devices will output the same FAST5/POD5 file format, and the setup discussed will generally be applicable to all ONT nanopore sequencers.
+ONT nanopore setups follow pretty closely to the previously illustrated examples, but are more tailored towards high-volume sequencing. The setup of these sequencers are relevant to the slow5 file format as many fields will depend to external events and physical attributes of the nanopore device. Mux status, read numbers, and channel ids are all important markers for analyzing your sequencing runs. Researches may use these datapoints to evaluate the efficacy of enrichment techniques, or identifying problematic transcripts. Here we will specifically look at the MinION device, but all devices will output either the [legacy FAST5 or new POD5 file format](https://community.nanoporetech.com/technical_documents/data-analysis/v/datd_5000_v1_revr_22aug2016/file-formats), and the setup discussed will generally be applicable to all ONT nanopore sequencers.
 
 ![nanopore setup wells](./assets/images/nanopore_setup_wells.png)
 
 ### Sensor Array, Wells, and Channels
 
-In order to start sequencing DNA, the MinION must take in a disposable component called a "flow cell". You can think of a flow cell as a hot-swappable version of the *cis* and *trans* liquid chambers discussed in the setup before. A MinION flow cell holds 2048 total sensor "wells". Each well holds a single nanopore between a shared *cis* chamber and its own individual *trans* chamber well. Each *trans* chamber well contains a electrode at its base where the current can be measured. Despite containing 2048 sensor wells, the MinION can only measure 512 simultaneously. Thus, each of the wells are organised into groups of 4, which we can refer to as "channels". The sequencer will select best performing well in each channel to have its current recorded.
+In order to start sequencing DNA, the MinION must take in a disposable component called a "flow cell". You can think of a flow cell as a hot-swappable version of the *cis* and *trans* liquid chambers discussed in the setup before. Basically, because things get damaged during experiments we make part of the setup a replacable component. Once the flow cell is too damaged to function, we throw it out and get a new one. Coincidentally, this is also a good monetization model for ONT.
+
+A MinION flow cell holds 2048 total sensor "wells". Each well holds a single nanopore between a shared *cis* chamber and its own individual *trans* chamber well. Each *trans* chamber well contains a electrode at its base where the current can be measured. Despite containing 2048 sensor wells, the MinION can only measure 512 simultaneously. Thus, each of the wells are organised into groups of 4, which we can refer to as "channels". The sequencer will select best performing well in each channel to have its current recorded.
 
 ### Mux Scan, Mux Status, Mux Selection
 
@@ -80,7 +82,11 @@ In addition to mux selection, if the device thinks a pore is blocked or clogged 
 
 ## Signal Conversion
 
-The analogue signal measured undergoes digital conversion via the Analog to Digital Converter (ADC) before it can be stored in memory. We refer to the digital signal output by the ADC as our "raw signal". To convert this raw signal into the approximation of our actual anagolue signal in [pico amps](https://en.wikipedia.org/wiki/Ampere#SI_prefixes), we use the following equation:
+The analogue signal measured undergoes digital conversion via the Analog to Digital Converter (ADC) before it can be stored in memory.
+
+
+
+We refer to the digital signal output by the ADC as our "raw signal". To convert this raw signal into the approximation of our actual analogue signal in [pico amps](https://en.wikipedia.org/wiki/Ampere#SI_prefixes), we use the following equation:
 
 `signal_in_pico_ampere = (raw_signal + offset) * (range / digitisation)`
 
@@ -88,7 +94,7 @@ The `raw_signal` is the one stored in file, and must be converted into `signal_i
 
 ## Why SLOW5?
 
-Oxford Nanopore Technologies (ONT) is the leading commercial provider of nanopore sequencing. The default FAST5/POD5 file format is not optimal for the large amounts of data processing and manipulation required for interpreting nanopore signal data. Hence, SLOW5 was developed to overcome inherent limitations in the standard FAST5/POD5 signal data format that prevent efficient, scalable analysis and cause many headaches for developers.
+Oxford Nanopore Technologies (ONT) is the leading commercial provider of nanopore sequencing. The default FAST5 file format was not optimal for the large amounts of data processing and manipulation required for interpreting nanopore signal data. Hence, SLOW5 was developed to overcome inherent limitations in the standard FAST5 signal data format that prevent efficient, scalable analysis and cause many headaches for developers. Since then, POD5 was developed by ONT and has now become the new default output format for their nanopore platforms. However, SLOW5 still offers equal or better performance than POD5 and with a simpler specification. More importantly, SLOW5 as a format is fully mature and will likely not see any breaking changes for the forseeable future. This makes tooling/development with SLOW5 simple, maintainable, and accessible not only for developers but also researches looking into an efficient and stable file format.
 
 ## Whats Inside My SLOW5 File?
 
@@ -149,7 +155,7 @@ Here we go into detail of each primary field of a SLOW5 record. These fields are
 ---
 
 **read_id** | string\
-Simply the unique ID for each record in a particular SLOW5 file.
+Simply the unique ID for each record in a particular SLOW5 file. Looks like '00002194-fea5-433c-ba89-1eb6b60f0f28'.
 
 ---
 
@@ -166,7 +172,7 @@ This is the raw signal value output by the ADC on our nanopore device (for this 
 ---
 
 **len_raw_signal** | uint_64\
-The number of values (samples) in our raw signal.
+The number of values (samples) in our raw signal. If we have 100 samples for this read, len_raw_signal = 100.
 
 ---
 
@@ -197,7 +203,7 @@ Auxiliary fields may not be present in every SLOW5 file, these are just the comm
 ---
 
 **channel_number** | string\
-This simply indicates the channel that this read was sequenced in.
+This simply indicates the channel that this read was sequenced in. It's stored as a string, but so far has only been used to represent numbers.
 
 ---
 
