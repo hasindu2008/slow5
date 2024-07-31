@@ -84,9 +84,9 @@ In addition to mux selection, if the device thinks a pore is blocked or clogged 
 
 The analogue signal measured undergoes digital conversion via the Analog to Digital Converter (ADC) before it can be stored in memory.
 
+![nanopore setup wells](./assets/images/nanopore_adc.png)
 
-
-We refer to the digital signal output by the ADC as our "raw signal". To convert this raw signal into the approximation of our actual analogue signal in [pico amps](https://en.wikipedia.org/wiki/Ampere#SI_prefixes), we use the following equation:
+We refer to the digital signal output by the ADC as our "raw signal". To convert this raw signal back into an approximation of our actual analogue signal in [pico amps](https://en.wikipedia.org/wiki/Ampere#SI_prefixes), we use the following equation:
 
 `signal_in_pico_ampere = (raw_signal + offset) * (range / digitisation)`
 
