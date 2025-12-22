@@ -1,6 +1,6 @@
 # SLOW5 Ecosystem
 
-This page keeps track of all the links/pages associated with SLOW5 ecosystem in a single place. Select a category.
+This page keeps track of all the links/pages associated with SLOW5 ecosystem in a single place. Select a category:
 
 - [SLOW5 specification](https://hasindu2008.github.io/slow5specs)
 - [Software libraries](libs.md)
@@ -9,3 +9,4 @@ This page keeps track of all the links/pages associated with SLOW5 ecosystem in 
 - [Open datasets](data.md)
 - [Learning resourses](learn.md)
 
+A getting started tutorial on nanopore signal data in relation to the SLOW5 file format is available [here](tutorial.md).
