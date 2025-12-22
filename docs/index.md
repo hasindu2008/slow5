@@ -8,6 +8,7 @@ This page keeps track of all the links/pages associated with SLOW5 ecosystem in 
 - [Bioinformatics workflows](workflows.md)
 - [Open datasets](data.md)
 - [Learning resourses](learn.md)
+- [Publications](pub.md)
 
 A getting started tutorial on nanopore signal data in relation to the SLOW5 file format is now available [here](tutorial.md).
 
