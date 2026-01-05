@@ -1,6 +1,6 @@
 # SLOW5 Publications
 
-## format and toolkit
+## Format and toolkit
 
 S/BLOW5 file format, slow5lib (C library) and pyslow5 (Python Library)
 > Gamaarachchi, H., Samarakoon, H., Jenner, S.P. et al. Fast nanopore sequencing data analysis with SLOW5. Nat Biotechnol 40, 1026-1029 (2022). [https://doi.org/10.1038/s41587-021-01147-4](https://doi.org/10.1038/s41587-021-01147-4)
@@ -11,7 +11,7 @@ slow5tools toolkit
 Benefits of S/BLOW5 file format over ONT's latest POD5 format
 > Hasindu Gamaarachchi, Sasha Jenner, Hiruna Samarakoon, James M Ferguson, Ira W Deveson, The enduring advantages of the SLOW5 file format for raw nanopore sequencing data, GigaScience, Volume 14, 2025, giaf118. [https://doi.org/10.1093/gigascience/giaf118](https://doi.org/10.1093/gigascience/giaf118)
 
-## core applications
+## Core applications
 
 Remote S/BLOW5 access using slow5curl
 > Bonson Wong, James M Ferguson, Jessica Y Do, Hasindu Gamaarachchi, Ira W Deveson, Streamlining remote nanopore data access with slow5curl, GigaScience, Volume 13, 2024, giae016, [https://doi.org/10.1093/gigascience/giae016](https://doi.org/10.1093/gigascience/giae016)
