@@ -1,6 +1,6 @@
 # SLOW5 Ecosystem
 
-Here we keeps track of all the links/pages associated with SLOW5 ecosystem in a single place. Select a category:
+Here we keep track of all the links/pages associated with SLOW5 ecosystem in a single place. Click on a category:
 
 - [SLOW5 specification](https://hasindu2008.github.io/slow5specs)
 - [Software libraries](libs.md)
